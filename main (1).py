@@ -1,5 +1,5 @@
 from machine import Pin, I2C
-from utime import sleep
+from utime import sleep, sleep_ms, ticks_ms, ticks_diff
 
 # --- I2C Setup ---
 # SDA = GP26 (pin 31), SCL = GP27 (pin 32)
@@ -39,3 +39,79 @@ else:
     oled.show()
 
     print("Display initialized!")
+
+    sleep(1)
+
+    # Loading bar section (200 ms)
+    oled.fill(0)
+    oled.text("Loading dance ...", 0, 0)
+
+    bar_width = 100
+    x_start = 14
+    y_start = 30    
+
+    oled.rect(x_start, y_start, bar_width, 10, 1)  # outline of bar
+    oled.show()
+
+    LOADING_TIME_MS = 80
+    steps = 10
+    delay = LOADING_TIME_MS // steps
+
+    for i in range(steps):
+        fill = int((i / steps) * (bar_width - 2))
+        oled.fill_rect(x_start + 1, y_start + 1, fill, 8, 1)  # fill bar
+        oled.show()
+
+        sleep_ms(delay)
+
+        sleep(1)
+
+
+ # Dancing stick figure animation
+frames = [
+        [
+            "  O  ",
+            " /|\\ ",
+            " / \\ "
+        ],
+        [
+            "  O  ",
+            " \\|/ ",
+            " / \\ "
+        ],
+        [
+            "  O  ",
+            " /|> ",
+            " / \\ "
+        ],
+        [
+            "  O  ",
+            " <|\\ ",
+            " / \\ "
+        ]
+    ]
+start_time = ticks_ms()
+
+while ticks_diff(ticks_ms(), start_time) < 10000:
+
+        for frame in frames:
+
+            oled.fill(0)
+
+            oled.text(frame[0], 40, 10)
+            oled.text(frame[1], 40, 25)
+            oled.text(frame[2], 40, 40)
+
+            oled.show()
+
+            sleep(0.25)
+
+# Final message
+oled.fill(0)
+oled.text("Dance Complete!", 10, 28)
+oled.show()
+
+sleep(4)
+
+# Stop the program
+raise SystemExit
