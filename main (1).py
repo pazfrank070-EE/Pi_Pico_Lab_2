@@ -3,7 +3,7 @@ from utime import sleep, sleep_ms, ticks_ms, ticks_diff
 
 # --- I2C Setup ---
 # SDA = GP26 (pin 31), SCL = GP27 (pin 32)
-i2c = I2C(1, sda=Pin(26), scl=Pin(27), freq=400000)
+i2c = I2C(1, sda=Pin(2), scl=Pin(3), freq=400000)
 
 # Scan for I2C devices first
 devices = i2c.scan()
